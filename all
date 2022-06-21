@@ -1,0 +1,1671 @@
+####################################################################
+Please contact me at (xiliangdiao@tamu.edu) or (xiliangdiao@163.com)  
+if you have any questions with this code
+####################################################################
+########################      Fig.1         ########################
+####################################################################
+
+import netCDF4 as nc
+import matplotlib.pyplot as plt
+from matplotlib.colors import from_levels_and_colors
+import numpy as np
+from matplotlib import animation
+from matplotlib.colors import BoundaryNorm
+import matplotlib.colors as cols
+import matplotlib as mpl
+from mpl_toolkits.basemap import Basemap
+from matplotlib import ticker, cm
+import seaborn as sns
+
+data=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ice300/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.0300-09.aice.nc')
+plotvar = data.variables['aice'][0,:,:]
+lont = data.variables['lont_bounds'][:,:,0]
+latt = data.variables['latt_bounds'][:,:,0]
+
+lont2 = lont[200:,1100]
+latt2 = latt[200:,1100]
+
+
+#################################################################
+nice_cmap=plt.get_cmap('Blues')
+lev_cmap = nice_cmap([250,240,230,220,210,190,180,170,150,130,110,100,90,80,70,60,50,40,30,20,10,0])
+new_cmap = cols.ListedColormap(lev_cmap,"Blues")
+#nice_levels = [0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]
+nice_levels = [0,10,20,30,40,50,60,70,80,90,100]
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+#################################################################
+
+plt.figure(figsize=(25,20))
+my_font = {'fontname':'Cambria', 'size':'40'}
+# set the mapping range
+map = Basemap(projection='aeqd', lat_0 = -90, lon_0 = 0,area_thresh = 100,\
+              #width = 10000000,height = 15000000,resolution ='h')     
+              width = 8900000,height = 8900000,resolution ='h') 
+map.drawcoastlines()
+map.fillcontinents(color = 'lightgrey')
+map.drawmapboundary(color='black')
+ 
+map.drawparallels(np.arange(-90,91,5),labels=[1,0,0,0],**my_font)
+map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+
+x,y=map(lont,latt)
+CP = map.contourf(x,y,plotvar,range(0,100),cmap = new_cmap,norm =norm,levels = nice_levels)
+x2,y2=map(lont2,latt2)
+map.plot(x2,y2,'black',linewidth=8)
+
+#CS=map.contour(x,y,plotvar2,[0.1,0.3],colors = 'green', linestyles = 'solid',linewidths=2)
+#plt.clabel(CS,fontsize=30,fmt='%1.1f')
+
+cbar =map.colorbar(CP,ticks = nice_levels)
+cbar.ax.tick_params(labelsize=45) 
+cbar.set_label('(%)', **my_font)
+#plt.suptitle("TIME 0119-10",**my_font)
+plt.xlabel("Time 300-09 (sea ice concentration)",**my_font)
+
+####################################################################
+########################      Fig.2         ########################
+####################################################################
+
+data=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ocn300/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.pop.h.0021-01.KMT.nc')
+plotvar = data.variables['KMT'][:,:]
+
+datau=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ocn300/UVEL/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.pop.h.0021-01.UVEL.nc')
+plotvaru = datau.variables['UVEL'][0,1,:,:]
+lontu = datau.variables['ULONG'][:,:]
+lattu = datau.variables['ULAT'][:,:]
+data=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ocn300/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.pop.h.0021-01.z_w_bot.nc')
+plotvar2 = data.variables['z_w_bot'][:]
+
+depth = plotvar2/100
+num = np.arange(1,62)
+for i in num: 
+    plotvar[plotvar==i] = depth[i]
+plotvar[plotvar==0] = -1
+
+lontu[lontu ==-1] = np.nan
+lattu[lattu ==-1] = np.nan
+lontu[:,1089] = -1
+
+# 63-68,,, 
+lont2 = lontu[247:365,1300]
+latt2 = lattu[247:365,1300]
+lont3 = lontu[247:365,700]
+latt3 = lattu[247:365,700]
+lont4 = lontu[247,700:1300]
+latt4 = lattu[247,700:1300]
+lont5 = lontu[365,700:1300]
+latt5 = lattu[365,700:1300]
+
+
+
+lont16 = lontu[247:365,1190]
+latt16 = lattu[247:365,1190]
+lont13 = lontu[247:365,1100]
+latt13 = lattu[247:365,1100]
+
+lont26 = lontu[247:365,1290]
+latt26 = lattu[247:365,1290]
+lont23 = lontu[247:365,1196]
+latt23 = lattu[247:365,1196]
+
+lont26 = lontu[247:365,1290]
+latt26 = lattu[247:365,1290]
+lont23 = lontu[247:365,1196]
+latt23 = lattu[247:365,1196]
+
+lont36 = lontu[247:365,1394]
+latt36 = lattu[247:365,1394]
+lont33 = lontu[247:365,1296]
+latt33 = lattu[247:365,1296]
+
+lont46 = lontu[247:365,900]
+latt46 = lattu[247:365,900]
+lont43 = lontu[247:365,1000]
+latt43 = lattu[247:365,1000]
+
+
+lont4443 = lontu[224:516,430]
+latt4443 = lattu[224:516,430]
+
+
+nice_cmap= nice_cmap=plt.get_cmap('Blues')
+lev_cmap = nice_cmap([10,20,30,40,50,60,70,80,90,100,110,120,130,150,160,170,180,185,190,\
+                      195,200,210,220,230,235,250]) 
+new_cmap = cols.ListedColormap(lev_cmap)
+
+        nice_levels = [2000,2250,2500,2750,3000,3250,3500,3750,4000,4250,4500,4750,5000]
+        plt.figure(figsize=(25,20))
+        my_font = {'fontname':'Cambria', 'size':'40'}
+
+        map = Basemap(projection='aeqd', lat_0 = -70, lon_0 = 0,area_thresh = 100,\
+                     width = 6000000,height = 4000000,resolution ='h') 
+        map.drawcoastlines()
+        map.fillcontinents(color = 'grey')
+        map.drawmapboundary(color='black')
+ 
+        map.drawparallels(np.arange(-90,91,5),labels=[1,0,0,0],**my_font)
+        map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+
+       
+        xq,yq=map(lontu,lattu)
+        x2,y2=map(lont2,latt2)
+        map.plot(x2,y2,'yellow',linewidth=8)
+        x3,y3=map(lont3,latt3)
+        map.plot(x3,y3,'yellow',linewidth=8)
+        x4,y4=map(lont4,latt4)
+        map.plot(x4,y4,'yellow',linewidth=8)
+        x5,y5=map(lont5,latt5)
+        map.plot(x5,y5,'yellow',linewidth=8)
+        
+                   
+        x13,y13=map(lont13,latt13)
+        map.plot(x13,y13,'green',linewidth=6)
+        x16,y16=map(lont16,latt16)
+        map.plot(x16,y16,'green',linewidth=6)
+        CP = map.contourf(xq,yq,plotvar,cmap = new_cmap,spacing = 'uniform',levels = nice_levels,extend='both')
+        x23,y23=map(lont23,latt23)
+        map.plot(x23,y23,'red',linewidth=6)
+        x26,y26=map(lont26,latt26)
+        map.plot(x26,y26,'red',linewidth=6)
+        CP = map.contourf(xq,yq,plotvar,cmap = new_cmap,spacing = 'uniform',levels = nice_levels,extend='both')
+        
+        #x33,y33=map(lont33,latt33)
+        #map.plot(x33,y33,'purple',linewidth=8)
+        #x36,y36=map(lont36,latt36)
+        #map.plot(x36,y36,'purple',linewidth=8)
+        #CP = map.contourf(xq,yq,plotvar,cmap = new_cmap,spacing = 'uniform',levels = nice_levels,extend='both')
+        
+        x43,y43=map(lont43,latt43)
+        map.plot(x43,y43,'orange',linewidth=6)
+        x46,y46=map(lont46,latt46)
+        map.plot(x46,y46,'orange',linewidth=6)
+        CP = map.contourf(xq,yq,plotvar,cmap = new_cmap,spacing = 'uniform',levels = nice_levels,extend='both')
+        
+        CP = map.contourf(xq,yq,plotvar,cmap = new_cmap,spacing = 'uniform',levels = nice_levels,extend='both')
+       
+        CP.cmap.set_over('midnightblue')
+        CP.cmap.set_under('white')
+        cbar =map.colorbar(CP,extend='both',extendfrac='auto',ticks= nice_levels)
+      
+        cbar.ax.tick_params(labelsize=40) 
+        cbar.set_label('Depth (m)', **my_font)
+####################################################################
+########################      Fig.3         ########################
+####################################################################
+
+ice = np.loadtxt("iceplot.out")
+mix = np.loadtxt("mixplot.out")
+#sal = np.loadtxt("salinityplot.out")
+sal = np.loadtxt("salinityplotSSS.out")
+
+A = np.arange(350)
+B = np.arange(600)
+xx, yy = np.meshgrid(B, A)
+
+#t = np.arange(0,4176,12)
+my_font = {'fontname':'Cambria', 'size':'16'}
+##################################################################
+fig = plt.figure(figsize=(20,25), dpi=100)
+################################################################
+ax1 = fig.add_axes([0.1, 0.1, 0.2, 0.8],
+                    xticklabels=[])
+nice_cmap=plt.get_cmap('Blues')
+lev_cmap = nice_cmap([250,240,230,220,210,190,180,170,150,130,110,100,90,80,70,60,50,40,30,20,10,0])
+new_cmap = cols.ListedColormap(lev_cmap,"Blues")
+nice_levels = [0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+
+my_font = {'fontname':'Cambria', 'size':'20'}
+im = ax1.contourf(xx, yy, ice[:,:],cmap = new_cmap,norm =norm,spacing = 'uniform',levels = nice_levels)
+
+im.cmap.set_over('white')
+
+cbar = fig.colorbar(im, ax=ax1,ticks=nice_levels)
+cbar.ax.tick_params(labelsize=20)
+cbar.set_label('(%)', **my_font)
+
+plt.vlines(200, 0, 349, colors = "orange",linestyles = "solid",linewidth=3)
+plt.vlines(295, 0, 349, colors = "orange",linestyles = "solid",linewidth=3)
+
+
+plt.vlines(400, 0, 349, colors = "green",linestyles = "dashed",linewidth=3)
+plt.vlines(495, 0, 349, colors = "green",linestyles = "dashed",linewidth=3)
+
+plt.vlines(500, 0, 349, colors = "red",linestyles = "dotted",linewidth=3)
+plt.vlines(595, 0, 349, colors = "red",linestyles = "dotted",linewidth=3)
+
+
+plt.xticks(range(0,601,100), ['-40','-30','-20','-10', '0', '10', '20'],**my_font)
+#plt.yticks(range(0,181,10), ['150','160','170',\
+                             #'180','190','200', '210','220','230', '240','250', '260','270','280','290','300','310','320','330'],**my_font)
+plt.yticks(range(0,351,50), ['150','200', '250','300', '350','400','450','500'],**my_font)
+plt.xlabel('Longtitude',**my_font)
+plt.ylabel('Years',**my_font)
+#ax1.set_title('(a)',fontsize=25)
+ax1.text(0.04, 0.02, '(a)', transform=ax1.transAxes,size=36, weight='bold')
+###########################################
+ax2 = fig.add_axes([0.4, 0.1, 0.2, 0.8],
+                   xticklabels=[])
+nice_cmap=plt.get_cmap('Reds')
+lev_cmap = nice_cmap([10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,\
+                      200,210,220])
+#new_cmap = cols.ListedColormap(lev_cmap,"praj_cmap")
+new_cmap = cols.ListedColormap(lev_cmap,"Reds")
+my_font = {'fontname':'Cambria', 'size':'20'}
+
+
+#################################################################
+
+
+#nice_levels = [34.43,34.44,34.45,34.46,34.47,34.48,34.49,34.50,34.51,34.52,\
+               #34.53,34.54,34.55,34.56,34.57,34.58,34.59,34.6,34.61,34.62,34.63,34.64,34.65,34.66,34.67]
+nice_levels = [34.41,34.43,34.45,34.47,34.49,34.51,\
+               34.53,34.55,34.57,34.59,34.61,34.63,34.65,34.67,34.69]
+
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+
+im = ax2.contourf(xx, yy,sal,cmap = new_cmap,norm =norm,spacing = 'uniform',\
+                  levels = nice_levels,extend='both')
+im.cmap.set_over('darkred')
+im.cmap.set_under('white')
+plt.vlines(200, 0, 349, colors = "orange",linestyles = "solid",linewidth=3)
+plt.vlines(295, 0, 349, colors = "orange",linestyles = "solid",linewidth=3)
+
+
+plt.vlines(400, 0, 349, colors = "green",linestyles = "dashed",linewidth=3)
+plt.vlines(495, 0, 349, colors = "green",linestyles = "dashed",linewidth=3)
+
+plt.vlines(500, 0, 349, colors = "red",linestyles = "dotted",linewidth=3)
+plt.vlines(595, 0, 349, colors = "red",linestyles = "dotted",linewidth=3)
+
+
+#plt.vlines(700, 0, 349, colors = "purple",linestyles = 'dashdot',linewidth=3)
+#plt.vlines(795, 0, 349, colors = "purple",linestyles = "dashdot",linewidth=3)
+
+
+#CS = ax0.contour(xx[:,430],yy[:,430],colors = 'r')
+cbar = fig.colorbar(im, ax=ax2, ticks=nice_levels,extendfrac='auto')
+cbar.ax.tick_params(labelsize=20)
+cbar.set_label('(psu)', **my_font)
+#plt.clabel(CS, inline=0.1, fontsize=10)
+
+#############################################################################
+##设定X坐标值
+plt.xticks(range(0,601,100), ['-40','-30', '-20', '-10', '0','10','20','30'],**my_font)
+plt.yticks(range(0,351,50), ['150', '200', '250', '300', '350','400','450','500'],**my_font)
+plt.xlabel('Longtitude',**my_font)
+#plt.ylabel('Years',**my_font)
+#ax2.set_title('(b)',fontsize=25)
+ax2.text(0.04, 0.02, '(b)', transform=ax2.transAxes,size=36, weight='bold')
+###########################################
+ax3 = fig.add_axes([0.7, 0.1, 0.2, 0.8],
+                   xticklabels=[])
+nice_cmap=sns.diverging_palette(245, 10, n=10,as_cmap=True)
+lev_cmap = nice_cmap([130,150,160,170,180,190,200,210,220,230,280]) 
+new_cmap = cols.ListedColormap(lev_cmap,"praj_cmap")
+nice_levels = [0,200,300,400,500,600,700,800,900,1000,1100,1200]
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+
+im = ax3.contourf(xx, yy, mix/100, cmap = new_cmap,norm =norm,spacing = 'uniform',\
+                  levels = nice_levels,extend='max')
+im.cmap.set_over('firebrick')
+cbar = fig.colorbar(im, ax=ax3,extendfrac='auto',ticks=nice_levels)
+cbar.ax.tick_params(labelsize=20)
+cbar.set_label('(m)', **my_font)
+#ax3.set_title('Mixed Layer Depth')
+plt.vlines(200, 0, 349, colors = "orange",linestyles = "solid",linewidth=3)
+plt.vlines(295, 0, 349, colors = "orange",linestyles = "solid",linewidth=3)
+
+
+plt.vlines(400, 0, 349, colors = "green",linestyles = "dashed",linewidth=3)
+plt.vlines(495, 0, 349, colors = "green",linestyles = "dashed",linewidth=3)
+
+plt.vlines(500, 0, 349, colors = "red",linestyles = "dotted",linewidth=3)
+plt.vlines(595, 0, 349, colors = "red",linestyles = "dotted",linewidth=3)
+
+plt.xticks(range(0,700,100), ['-40','-30', '-20', '-10', '0','10','20'],**my_font)
+#plt.yticks(range(0,181,10), ['150','160','170',\
+#                             '180','190','200', '210','220','230', '240','250', '260','270','280','290','300','310','320','330'],**my_font)
+plt.yticks(range(0,351,50), ['150', '200', '250', '300', '350','400','450','500'],**my_font)
+plt.xlabel('Longtitude',**my_font)
+plt.xlabel('Longtitude',**my_font)
+#plt.ylabel('Years',**my_font)
+#ax3.set_title('(c)',fontsize=25)
+ax3.text(0.04, 0.02, '(c)', transform=ax3.transAxes,size=36, weight='bold')
+plt.savefig("fig3new.png",bbox_inches='tight',dpi=fig.dpi)
+
+
+####################################################################
+########################      Fig.5         ########################
+####################################################################
+
+onepoint = np.loadtxt('onepointSSS.out')
+
+my_font = {'fontname':'Cambria', 'size':'21'}
+##################################################################
+fig = plt.figure(figsize=(20,20), dpi=100)
+################################################################
+################################################################
+t = np.arange(0,350,1)
+ax1 = fig.add_axes([0.1, 0.9, 0.8, 0.3],
+                   xticklabels=[])
+ax1.plot(onepoint,'k-o',linewidth=4,label='Salinity')
+plt.legend(loc='upper left',fontsize='xx-large')
+#########################################
+
+plt.xticks(range(0,49,6), ['297','(July)','298','(July)','299','(July)','300','(July)', '301','(July)', '2008','2018','290','310','330'],**my_font)
+plt.yticks(**my_font)
+plt.vlines(45,33.7,34.75,  colors = "grey",linewidth=75)
+plt.vlines(42,33.7,34.75,  colors = "grey",linewidth=1)
+plt.vlines(30,33.7,34.75,  colors = "grey",linewidth=1)
+plt.vlines(18,33.7,34.75,  colors = "grey",linewidth=1)
+plt.vlines(6,33.7,34.75,  colors = "grey",linewidth=1)
+plt.xlabel('Years',**my_font)
+plt.xlabel('Years',**my_font)
+plt.ylabel('(psu)',color= 'k',**my_font)
+plt.hlines(34.55, 0, 49, colors = "b",linestyles = "dashed",linewidth=4)
+#plt.hlines(mean, 0, 2160, colors = "k",linestyles = "dashed",linewidth=4)
+plt.axis("tight")
+plt.yticks(np.arange(33.8,34.8,0.1), ['33.8','33.9','34.0','34.1','34.2', '34.3', '34.4','34.5','34.6','34.7','34.8'],**my_font)
+#plt.plot([0,-ww2[0]],[320,2300])
+#ax1.set_title('(a) Upper Ocean Salinity (65$^\circ$S ,10$^\circ$E, one grid point)',fontsize = '24')
+ax1.text(0.465, 0.05, '(a)', transform=ax1.transAxes,size=36, weight='bold')
+###########################################
+ax2 = fig.add_axes([0.1, 0.4, 0.8, 0.4],
+                   xticklabels=[])
+#my_font = {'fontname':'Cambria', 'size':'40'}
+# set the mapping range
+map = Basemap(projection='aeqd', lat_0 = -70, lon_0 = 0,area_thresh = 100,\
+              #width = 10000000,height = 15000000,resolution ='h')     
+              width = 6000000,height = 4500000,resolution ='h') 
+map.drawcoastlines()
+map.fillcontinents(color = 'lightgrey')
+map.drawmapboundary(color='black')
+ 
+map.drawparallels(np.arange(-90,91,5),labels=[1,0,0,0],**my_font)
+map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+
+x,y=map(lont,latt)
+CP = map.contourf(x,y,plotvar,range(0,100),cmap = new_cmap,norm =norm,levels = nice_levels)
+#x2,y2=map(lont2,latt2)
+#map.plot(x2,y2,'black',linewidth=8)
+
+#CS=map.contour(x,y,plotvar2,[0.1,0.3],colors = 'green', linestyles = 'solid',linewidths=2)
+#plt.clabel(CS,fontsize=30,fmt='%1.1f')
+
+cbar =map.colorbar(CP,ticks = nice_levels)
+cbar.ax.tick_params(labelsize=21) 
+cbar.set_label('(%)', **my_font)
+#plt.suptitle("TIME 0119-10",**my_font)
+#plt.xlabel("(b) Year 300 September Sea ice concentration",fontsize = '24')
+ax2.text(0.465, 0.03, '(b)', transform=ax2.transAxes,size=36, weight='bold')
+plt.savefig("ice30009newnew.png",bbox_inches='tight')
+
+####################################################################
+########################      Fig.6         ########################
+####################################################################
+
+data=nc.Dataset('/ihesp/archive/Sunway_Runs/HR_PI_CTRL/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.pop.h.AICE.002101-050112.nc')
+plotvar3 = data.variables['aice'][8:5760:12,247:365,700:1300]
+
+aveplot = np.nanmean(plotvar3,axis=1)
+
+A = np.arange(350)
+B = np.arange(600)
+xx, yy = np.meshgrid(B, A)
+
+#################################################################
+nice_cmap=plt.get_cmap('Blues')
+lev_cmap = nice_cmap([250,240,230,220,210,190,180,170,150,130,110,100,90,80,70,60,50,40,30,20,10,0])
+new_cmap = cols.ListedColormap(lev_cmap,"Blues")
+nice_levels = [0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+
+# plot the result
+fig = plt.figure(figsize=(8, 40),dpi=100)
+ax0 = fig.add_axes([0.15, 0.1, 0.8, 0.8])
+#ax0 = fig.add_axes()
+my_font = {'fontname':'Cambria', 'size':'20'}
+im = ax0.contourf(xx, yy, aveplot[129:479,:],cmap = new_cmap,norm =norm,spacing = 'uniform',\
+                  levels = nice_levels)#,extend='max')
+
+im.cmap.set_over('white')
+
+cbar = fig.colorbar(im, ax=ax0,ticks=nice_levels)
+cbar.ax.tick_params(labelsize=20)
+
+plt.vlines(100, 0, 349, colors = "yellow",linestyles = "solid",linewidth=2)
+plt.vlines(395, 0, 349, colors = "yellow",linestyles = "solid",linewidth=2)
+
+
+plt.vlines(400, 0, 349, colors = "green",linestyles = "dashed",linewidth=2)
+plt.vlines(495, 0, 349, colors = "green",linestyles = "dashed",linewidth=2)
+
+plt.vlines(500, 0, 349, colors = "blue",linestyles = "dotted",linewidth=2)
+plt.vlines(595, 0, 349, colors = "blue",linestyles = "dotted",linewidth=2)
+
+
+plt.xticks(range(0,601,100), ['-40','-30','-20','-10', '0', '10', '20'],**my_font)
+#plt.yticks(range(0,181,10), ['150','160','170',\
+                             #'180','190','200', '210','220','230', '240','250', '260','270','280','290','300','310','320','330'],**my_font)
+plt.yticks(range(0,351,50), ['150','200', '250','300', '350','400','450','500'],**my_font)
+plt.xlabel('Longtitude',**my_font)
+plt.ylabel('Years',**my_font)
+ax0.set_title('Sea Ice Concentration (63$^\circ$S-68$^\circ$S)',**my_font)
+
+np.savetxt('iceplot.out',aveplot[129:479,:])
+
+#weddle2 = aveplot[129:479,100:400]
+weddle2new = aveplot[129:479,200:300]
+maudrise2 = aveplot[129:479,400:500]
+astrid2 = aveplot[129:479,500:600]
+#upstream2 = aveplot[129:479,700:800]
+
+
+weddlemean2new = weddle2new.mean(axis=1)
+maudmean2 = maudrise2.mean(axis=1)
+astridmean2 = astrid2.mean(axis=1)
+
+np.savetxt('weddlemeanice2new.out', weddlemean2new)
+np.savetxt('maudmeanice2.out', maudmean2)
+np.savetxt('astridmeanice2.out', astridmean2)
+
+wspxx2new = np.where(weddlemean2new<70)
+mrpxx2 = np.where(maudmean2<70)
+noxx2 = np.where(maudmean2>70)
+arpxx2 = np.where(astridmean2<70)
+
+np.savetxt('wspxx2new.out', wspxx2new)
+np.savetxt('mrpxx2.out', mrpxx2)
+np.savetxt('noxx2.out', noxx2)
+np.savetxt('arpxx2.out', arpxx2)
+
+import waipy
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+
+weddlemean = np.loadtxt("maudmeanice2.out")
+#weddlemean = np.loadtxt("weddlemeanice2new.out")
+data_norm = waipy.normalize(weddlemean) # Normalized value, so now there is no unit
+alpha = np.corrcoef(data_norm[0:-1], data_norm[1:])[0,1]; 
+print("Lag-1 autocorrelation = {:4.2f}".format(alpha))
+
+label='Maud Rise Sea Ice Concentration (Normalized Value)'
+
+result = waipy.cwt(data_norm, 1, pad = 1, dj = 0.25, s0 = 2, j1 = 7/0.25, lag1 = alpha, param = 6, \
+                   mother='Morlet',name='x')
+time = np.arange(0, 350) * 1 + 150
+my_font = {'fontname':'Cambria', 'size':'25','weight' : 'bold'}
+waipy.wavelet_plot(label, time, data_norm, 0.01, result, xlabel_cwt='Time (years)',ylabel_cwt='Period (years)');
+font = {'family' : 'normal','weight' : 'bold','size'   : 15}
+matplotlib.rc('font', **font)
+plt.savefig("i1.png",bbox_inches='tight')
+
+####################################################################
+########################      Fig.7         ########################
+####################################################################
+months = [f"{x:02d}" for x in range(1,13)]
+years = [f"{x:04d}" for x in range(292,312)]
+i =0
+result = np.zeros((240))
+
+for yy in years:
+    for mm in months:
+
+        data=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ocn300/TEMP150/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.pop.h.'+yy+'-'+mm +'.TEMP.nc')
+        plotvar = data.variables['TEMP'][0,:,:]
+        lont = data.variables['TLONG']
+        latt = data.variables['TLAT']
+        plotvar = plotvar[0,247:365,1100:1200]
+        #plotvar[plotvar == -1.0] = np.nan
+        aveplot = np.nanmean(plotvar,axis=1)
+        aveplot = np.nanmean(aveplot,axis=0)
+        result[i] = aveplot
+        
+        i = i + 1
+#********************************************************************
+
+salt = np.zeros((240))
+i =0
+for yy in years:
+    for mm in months:
+        data=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ocn300/SALT/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.pop.h.'+yy+'-'+mm +'.SALT.nc')
+        plotvar = data.variables['SALT'][0,:,:]
+        lont = data.variables['TLONG']
+        latt = data.variables['TLAT']
+        plotvar = plotvar[0,247:365,1100:1200]
+        #plotvar = plotvar[0,224:343,1100:1200]
+        #plotvar[plotvar == -1000.0] = np.nan
+        aveplot = np.nanmean(plotvar,axis=1)
+        aveplot = np.nanmean(aveplot,axis=0)
+        salt[i] = aveplot
+        
+        i = i + 1
+#********************************************************************
+
+TTT = result[8:236].reshape(19,12)
+SSS = salt[8:236].reshape(19,12)
+
+T = np.arange(-2,6.5,0.01)
+S = np.arange(33.3,34.7,0.01)
+dens = np.zeros([850,141])
+
+import seawater as gsw
+# Loop to fill in grid with densities
+for j in range(0,850):
+    for i in range(0, 141):
+        dens[j,i]=gsw.dens0(S[i],T[j])-1000
+        
+        
+SSSmean = (SSS[0,:] + SSS[1,:] + SSS[2,:] + SSS[3,:] + SSS[4,:] + SSS[5,:] + SSS[6,:] + SSS[7,:])/8
+TTTmean = (TTT[0,:] + TTT[1,:] + TTT[2,:] + TTT[3,:] + TTT[4,:] + TTT[5,:] + TTT[6,:] + TTT[7,:])/8
+
+SSSmean1 = (SSS[10,:] + SSS[11,:] + SSS[12,:] + SSS[13,:]+ SSS[14,:] + SSS[15,:] + SSS[16,:] + SSS[17,:] +\
+            SSS[18,:])/9
+TTTmean1 = (TTT[10,:] + TTT[11,:] + TTT[12,:] + TTT[13,:]+ TTT[14,:] + TTT[15,:] + TTT[16,:] + TTT[17,:] +\
+            TTT[18,:])/9
+            
+my_font = {'fontname':'Cambria', 'size':'15'}
+# Plot data ***********************************************
+fig = plt.figure(figsize=(10, 20), dpi=100)
+ax1 = fig.add_axes([0.1, 0.5, 0.8, 0.36])
+CS = plt.contour(S,T,dens, linestyles='dashed', colors='k')
+plt.clabel(CS, fontsize=12, inline=1,fmt='%1.3f') # Label every second level
+plt.hlines(-1.8,33.41, 34.69, colors = "red",linestyles = "dashed",linewidth=4)
+Time = np.arange(0,14,1)
+
+number = 19
+cmap = plt.get_cmap('jet')
+colors = [cmap(i) for i in np.linspace(0, 1, number)]
+
+for i, color in enumerate(colors, start=0):
+    ax1.plot(SSS[i,:],TTT[i,:], color=color,linewidth=5, label='$Year {i} $'.format(i=i+292))
+    ax1.legend(loc='upper left')
+
+for i, color in enumerate(colors, start=0):
+    ax1.scatter(SSS[i,0],TTT[i,0], color=color,s=100 )
+
+ax1.plot(SSSmean[:6],TTTmean[:6],color='black', marker='^', linestyle='dotted',linewidth=5,markersize=10)
+ax1.plot(SSSmean[5:],TTTmean[5:],color='purple', marker='^', linestyle='dotted',linewidth=5,markersize=10)
+
+ax1.plot(SSSmean1[:6],TTTmean1[:6],color='black', marker='s', linestyle='dotted',linewidth=5,markersize=10)
+ax1.plot(SSSmean1[5:],TTTmean1[5:],color='purple', marker='s', linestyle='dotted',linewidth=5,markersize=10)
+
+plt.xlim(33.4, 34.7)
+plt.yticks(**my_font)
+plt.xticks(**my_font)
+ax1.set_xlabel('Salinity (psu)', **my_font)
+ax1.set_ylabel('Temperature ($^\circ$C)', **my_font)
+#ax1.set_title('T-S Diagrams (From model year 292-310, averaged in MRP region)',**my_font)
+ax1.text(0.02, 0.04, '(a)', transform=ax1.transAxes,size=36, weight='bold')
+#############################################################################
+ax2 = fig.add_axes([0.1, 0.1, 0.8, 0.36])
+CS = plt.contour(S,T,dens, levels=[27.69,27.71,27.73,27.75, 27.77,27.79,27.81,27.83,27.85,27.87,27.89],linestyles='dashed', colors='k')
+plt.clabel(CS, fontsize=8,inline_spacing=0.1,fmt='%1.3f') # Label every second level
+
+plt.hlines(-1.75,33.51, 34.69, colors = "red",linestyles = "dashed",linewidth=4)
+Time = np.arange(0,14,1)
+
+number = 19
+cmap = plt.get_cmap('jet')
+colors = [cmap(i) for i in np.linspace(0, 1, number)]
+
+
+for i, color in enumerate(colors, start=0):
+    t = plt.text(SSS[i,0],TTT[i,0], i+292, fontsize=10,horizontalalignment='center',
+                 verticalalignment='center', fontdict={'color':'black'})
+
+    ax2.plot(SSS[:,0],TTT[:,0],color=color)
+    #ax1.scatter(SSS[:,0],TTT[:,0])
+    ax2.scatter(SSS[i,0],TTT[i,0], color=color,s=500,label='$Year {i} $'.format(i=i+292) )
+    ax2.legend()
+
+plt.xlim(34.4, 34.7)
+
+plt.ylim(-2, 0)
+plt.yticks(**my_font)
+plt.xticks(**my_font)
+ax2.set_xlabel('Salinity (psu)', **my_font)
+ax2.set_ylabel('Temperature ($^\circ$C)', **my_font)
+#ax1.set_title('T-S Diagrams (From model year 292-310, averaged in MRP region)',**my_font)
+ax2.text(0.02, 0.04, '(b)', transform=ax2.transAxes,size=36, weight='bold')
+
+####################################################################
+########################      Fig.8         ########################
+####################################################################
+
+data=nc.Dataset('B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.pop.h.EVAP_F.027001-027912.nc')
+plotvar = data.variables['EVAP_F'][8,:,:]
+lont = data.variables['TLONG']
+latt = data.variables['TLAT']
+lont1 = lont[224:343,600:1400]
+latt1 = latt[224:343,600:1400]
+#########121-09
+lont = lont[0:600,:]
+latt = latt[0:600,:]
+plotvar2 = plotvar[0:600,:]
+#plotvars = plotvars[15,:,:]
+plotvar2[plotvar2 == -1] = np.nan
+
+data=nc.Dataset('B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.evap_ai.027001-027912.nc')
+plotvarice = data.variables['evap_ai'][8,:,:]
+lont = data.variables['TLON']
+latt = data.variables['TLAT']
+lont1 = lont[224:343,600:1400]
+latt1 = latt[224:343,600:1400]
+#########121-09
+lont = lont[0:600,:]
+latt = latt[0:600,:]
+plotvarice = plotvarice[0:600,:]
+#plotvars = plotvars[15,:,:]
+plotvarice[plotvarice == -1] = np.nan
+
+evaptol = plotvar2*3600*24*100/997 + plotvarice
+
+dataice222=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ice300/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.0270-09.aice.nc')
+plotvarice222 = dataice222.variables['aice'][0,:600,:]
+lontice222 = dataice222.variables['lont_bounds'][:600,:,0]
+lattice222 = dataice222.variables['latt_bounds'][:600,:,0]
+
+t = np.arange(2,348,1)
+my_font = {'fontname':'Cambria', 'size':'16'}
+##################################################################
+fig = plt.figure(figsize=(20,20), dpi=100)
+ax1 = plt.subplot(2, 2, 1)
+#####################################################################
+nice_cmap= nice_cmap=plt.get_cmap('Blues')
+lev_cmap = nice_cmap([10,20,30,40,50,60,70,80,90,100,110,120,130,150,160,170,180,185,190,\
+                      195,200,210,220,230,235,250]) 
+new_cmap = cols.ListedColormap(lev_cmap)
+#nice_levels = [0.00001*3600*24*100/997,0.000012*3600*24*100/997,0.000014*3600*24*100/997,0.000016*3600*24*100/997,\
+               #0.000018*3600*24*100/997,0.00002*3600*24*100/997,0.000024*3600*24*100/997,0.000026*3600*24*100/997,\
+               #0.000028*3600*24*100/997,0.00003*3600*24*100/997,0.000032*3600*24*100/997]
+nice_levels = [0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3]
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+#********************************************************************
+
+# set the mapping range
+map = Basemap(projection='aeqd', lat_0 = -90, lon_0 = 0,area_thresh = 100,\
+                width = 16000000,height = 16000000,resolution ='h') 
+##width = 2500000,height = 1500000
+##lat_0 = -65, lon_0 = 0
+#############################################
+map.drawcoastlines()
+map.fillcontinents(color = 'lightgrey')
+map.drawmapboundary(color='black')
+ 
+map.drawparallels(np.arange(-90,91,5),labels=[1,0,0,0],**my_font)
+map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+
+x,y=map(lontsnow,lattsnow)
+CP = map.contourf(x,y,(plotvarsnow+plotvarrain)*10,cmap = new_cmap,norm =norm,spacing = 'uniform',levels = nice_levels,extend='both')
+map.drawmapboundary(fill_color='lightgrey')
+CP.cmap.set_over('black')
+CP.cmap.set_under('white')
+
+#CS=map.contour(x,y,plotvar,[0.1,0.2],colors = 'b', linestyles = 'solid',linewidths=3)
+#CS=map.contour(x,y,plotvar,[700],colors = 'r', linestyles = 'solid',linewidths=1)
+#plt.clabel(CS, inline=0.1, fontsize=30)
+#cbar =map.colorbar(CP,extend='both',extendfrac='auto',extendrect='True')
+cbar =map.colorbar(CP,extendfrac='auto',ticks=nice_levels)
+cbar.ax.tick_params(labelsize=16) 
+cbar.set_label('(mm/day)', **my_font)
+#plt.xlabel('(a) Total precipitation (Rain + Snow)',**my_font)
+ax1.text(0.02, 0.02, '(a)', transform=ax1.transAxes,size=36, weight='bold')
+#####################################################################
+ax3 = plt.subplot(2, 2, 2)
+nice_cmap=plt.get_cmap('Reds')
+#lev_cmap = nice_cmap([10,20,30,40,50,60,70,80,90,100,110,120,140,150,160,170,180,190,200])
+lev_cmap = nice_cmap([220,200,190,180,170,160,150,140,130,120,110,100,90,80,70,60,50,40,30,20,10])
+new_cmap = cols.ListedColormap(lev_cmap,"Reds")
+#nice_levels = [34.20,34.30,34.35,34.40,34.45,34.50,34.65,34.70,34.72,34.73]
+nice_levels = [-3,-2.75,-2.5,-2.25,-2,-1.75,-1.5,-1.25,-1,-0.75,-0.5,-0.25]
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+#********************************************************************
+##34.50,34.55,34.60,
+my_font = {'fontname':'Cambria', 'size':'16'}
+# set the mapping range
+map = Basemap(projection='aeqd', lat_0 = -90, lon_0 = 0,area_thresh = 100,\
+                width = 8900000,height = 8900000,resolution ='h') 
+##width = 2500000,height = 1500000
+##lat_0 = -65, lon_0 = 0
+#############################################
+map.drawcoastlines()
+map.fillcontinents(color = 'lightgrey')
+map.drawmapboundary(color='black')
+ 
+map.drawparallels(np.arange(-90,91,5),labels=[1,0,0,0],**my_font)
+map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+
+x,y=map(lont,latt)
+CP = map.contourf(x,y,(plotvar2*3600*24*100/997 + plotvarice)*10 ,cmap = new_cmap,norm =norm,spacing = 'uniform',levels = nice_levels,extend='both')
+map.drawmapboundary(fill_color='lightgrey')
+CP.cmap.set_over('white')
+CP.cmap.set_under('darkred')
+
+#CS=map.contour(x,y,plotvar,[0.1,0.2],colors = 'b', linestyles = 'solid',linewidths=3)
+CS=map.contour(x,y,plotvar2,[700],colors = 'r', linestyles = 'solid',linewidths=1)
+plt.clabel(CS, inline=0.1, fontsize=30)
+#cbar =map.colorbar(CP,extend='both',extendfrac='auto',extendrect='True')
+cbar =map.colorbar(CP,extendfrac='auto',ticks=nice_levels)
+cbar.ax.tick_params(labelsize=16) 
+cbar.set_label('(mm/day)', **my_font)
+ax3.text(0.02, 0.02, '(b)', transform=ax3.transAxes,size=36, weight='bold')
+################################################################################
+ax4 = plt.subplot(2, 2, 3)
+#################################################################
+nice_cmap=plt.get_cmap('Blues')
+lev_cmap = nice_cmap([250,240,230,220,210,190,180,170,150,130,110,100,90,80,70,60,50,40,30,20,10,0])
+new_cmap = cols.ListedColormap(lev_cmap,"Blues")
+#nice_levels = [0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]
+nice_levels = [0,10,20,30,40,50,60,70,80,90,100]
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+#################################################################
+my_font = {'fontname':'Cambria', 'size':'16'}
+# set the mapping range
+map = Basemap(projection='aeqd', lat_0 = -90, lon_0 = 0,area_thresh = 100,\
+              #width = 10000000,height = 15000000,resolution ='h')     
+              width = 8900000,height = 8900000,resolution ='h') 
+map.drawcoastlines()
+map.fillcontinents(color = 'lightgrey')
+map.drawmapboundary(color='black')
+ 
+map.drawparallels(np.arange(-90,91,5),labels=[1,0,0,0],**my_font)
+map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+
+x222,y222=map(lontice222,lattice222)
+CP = map.contourf(x222,y222,plotvarice222,range(0,100),cmap = new_cmap,norm =norm,levels = nice_levels)
+#x2,y2=map(lont2,latt2)
+#map.plot(x2,y2,'black',linewidth=8)
+
+#CS=map.contour(x,y,plotvar2,[0.1,0.3],colors = 'green', linestyles = 'solid',linewidths=2)
+#plt.clabel(CS,fontsize=30,fmt='%1.1f')
+
+cbar =map.colorbar(CP,ticks = nice_levels)
+cbar.ax.tick_params(labelsize=16) 
+cbar.set_label('(%)', **my_font)
+ax4.text(0.02, 0.02, '(c)', transform=ax4.transAxes,size=36, weight='bold')
+#plt.xlabel('(b) Total evaporation (ocean + sea ice cover)',**my_font)
+###################################################################
+plt.savefig("470preshow.png",bbox_inches='tight')
+
+
+####################################################################
+########################      Fig.10        ########################
+########################  Composite analysis  ######################
+####################################################################
+
+#####460
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.046001-046912.nc')
+plotvar = data.variables['dvidtt'][:,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di1 = averain
+
+# 63-68,,, 
+lont2 = lont[247:365,1100]
+latt2 = latt[247:365,1100]
+lont3 = lont[247:365,800]
+latt3 = latt[247:365,800]
+lont4 = lont[247,800:1100]
+latt4 = latt[247,800:1100]
+lont5 = lont[365,800:1100]
+latt5 = latt[365,800:1100]
+
+#####420
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.042001-042912.nc')
+plotvar = data.variables['dvidtt'][:24,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di2 = averain
+
+#####370
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.037001-037912.nc')
+plotvar = data.variables['dvidtt'][:24,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di3 = averain
+
+#####330
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.033001-033912.nc')
+plotvar = data.variables['dvidtt'][24:96,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di4 = averain
+
+#####290
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.029001-029912.nc')
+plotvar = data.variables['dvidtt'][24:96,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di5 = averain
+
+#####250
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.025001-025912.nc')
+plotvar = data.variables['dvidtt'][:24,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di6 = averain
+
+#####230
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.023001-023912.nc')
+plotvar = data.variables['dvidtt'][:24,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di7 = averain
+
+#####190
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.019001-019912.nc')
+plotvar = data.variables['dvidtt'][24:48,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di8 = averain
+
+#####160
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.016001-016912.nc')
+plotvar = data.variables['dvidtt'][24:48,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di9 = averain
+
+di = (di1+di2+di3+di4+di5+di6+di7+di8+di9)/9
+
+nice_cmap=plt.get_cmap('seismic')
+lev_cmap = nice_cmap([40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,\
+                      200,210,220])
+new_cmap = cols.ListedColormap(lev_cmap,"seismic")
+#nice_levels = [0.00001*3600*24*100/997,0.000012*3600*24*100/997,0.000014*3600*24*100/997,0.000016*3600*24*100/997,\
+               #0.000018*3600*24*100/997,0.00002*3600*24*100/997,0.000024*3600*24*100/997,0.000026*3600*24*100/997,\
+               #0.000028*3600*24*100/997,0.00003*3600*24*100/997,0.000032*3600*24*100/997]
+nice_levels = [-0.4,-0.3,-0.2,-0.1,0,0.1,0.2,0.3,0.4]
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+#********************************************************************
+
+plt.figure(figsize=(25,20))
+my_font = {'fontname':'Cambria', 'size':'35'}
+# set the mapping range
+map = Basemap(projection='aeqd', lat_0 = -70, lon_0 = 0,area_thresh = 100,\
+                     width = 6000000,height = 4000000,resolution ='h') 
+#############################################
+##width = 2500000,height = 1500000
+##lat_0 = -65, lon_0 = 0
+#############################################
+map.drawcoastlines()
+map.fillcontinents(color = 'lightgrey')
+map.drawmapboundary(color='white')
+ 
+map.drawparallels(np.arange(-90,91,5),labels=[1,0,0,0],**my_font)
+map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+
+x,y=map(lont,latt)
+CP = map.contourf(x,y,di*365/100*917/1000,levels = nice_levels,cmap = new_cmap,norm =norm,spacing = 'uniform',extend='both')
+CP.cmap.set_over('darkred')
+CP.cmap.set_under('darkblue')
+
+x2,y2=map(lont2,latt2)
+map.plot(x2,y2,'yellow',linewidth=4)
+x3,y3=map(lont3,latt3)
+map.plot(x3,y3,'yellow',linewidth=4)
+x4,y4=map(lont4,latt4)
+map.plot(x4,y4,'yellow',linewidth=4)
+x5,y5=map(lont5,latt5)
+map.plot(x5,y5,'yellow',linewidth=4)
+#plt.xlabel("Total Precipitation (polynya years minus no-polynya years) ",**my_font)
+#CS=map.contour(x,y,plotvar,[700],colors = 'r', linestyles = 'solid',linewidths=1)
+#plt.clabel(CS, inline=0.1, fontsize=35)
+#cbar =map.colorbar(CP,extend='both',extendfrac='auto',extendrect='True')
+cbar =map.colorbar(CP,extendfrac='auto',ticks=nice_levels)
+#cbar.minorticks_on()
+cbar.ax.tick_params(labelsize=35) 
+cbar.set_label('(mm/day)', **my_font)
+##############
+#####480
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.048001-048912.nc')
+plotvar = data.variables['dvidtt'][:96,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di21 = averain
+
+#####430
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.043001-043912.nc')
+plotvar = data.variables['dvidtt'][:96,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di22 = averain
+
+#####380
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.038001-038912.nc')
+plotvar = data.variables['dvidtt'][:60,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di23 = averain
+
+#####360
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.036001-036912.nc')
+plotvar = data.variables['dvidtt'][:60,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di24 = averain
+
+#####300
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.030001-030912.nc')
+plotvar = data.variables['dvidtt'][24:,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di25 = averain
+
+#####270
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.027001-027912.nc')
+plotvar = data.variables['dvidtt'][24:,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di26 = averain
+
+#####240
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.024001-024912.nc')
+plotvar = data.variables['dvidtt'][24:48,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di27 = averain
+
+#####220
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.022001-022912.nc')
+plotvar = data.variables['dvidtt'][:60,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di28 = averain
+
+#####170
+data=nc.Dataset('/Users/xiliangdiao/Downloads/dvidtt/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.017001-017912.nc')
+plotvar = data.variables['dvidtt'][:,0:1600,0:3600]
+lont = data.variables['TLON'][0:1600,0:3600]
+latt = data.variables['TLAT'][0:1600,0:3600]
+averain = np.nanmean(plotvar,axis=0)
+averain[averain ==-1]=np.nan
+#############################
+di29 = averain
+
+di2 = (di21+di22+di23+di24+di25+di26+di27+di28+di29)/9
+
+ww2 = np.loadtxt("dvi.out")
+wspxx = np.loadtxt("wspxx2new.out")
+mrpxx = np.loadtxt("mrpxx2.out")
+
+nice_cmap=plt.get_cmap('Reds')
+#lev_cmap = nice_cmap([10,20,30,40,50,60,70,80,90,100,110,120,140,150,160,170,180,190,200])
+lev_cmap = nice_cmap([220,200,190,180,170,160,150,140,130,120,110,100,90,80,70,60,50,40,30,20,10])
+new_cmap = cols.ListedColormap(lev_cmap,"Reds")
+#nice_levels = [34.20,34.30,34.35,34.40,34.45,34.50,34.65,34.70,34.72,34.73]
+nice_levels = [-1.2,-0.8,-0.4,0,0.4,0.8,1.2]
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+#********************************************************************
+
+t = np.arange(2,348,1)
+my_font = {'fontname':'Cambria', 'size':'16'}
+##################################################################
+fig = plt.figure(figsize=(20,20), dpi=100)
+ax1 = fig.add_axes([0.1, 0.9, 0.8, 0.2],
+                    xticklabels=[])
+plt.vlines(mrpxx, -0.6, 1.3, colors = "lightgrey",linewidth=5)
+plt.vlines(wspxx, -0.6, 1.3, colors = "grey",linewidth=5)
+
+#plt.vlines(310, -0.6,0, colors = "red",linewidth=3)
+#plt.vlines(319, -0.6, 0, colors = "red",linewidth=3)
+
+#plt.vlines(280, 0, 1.3, colors = "purple",linewidth=3)
+#plt.vlines(289, 0, 1.3, colors = "purple",linewidth=3)
+
+ax1.plot(t,-ww2*10,'blue',linewidth=4)
+plt.hlines(0, 0, 350, colors = "red",linestyles = "dashed")
+plt.xticks(range(0,350,20), ['150','170','190','210','230', '250', '270','290','310','330','350', '370', '390','410','430','450','470','490','500'],**my_font)
+#plt.yticks(np.arange(-0.6,0.6,0.2), ['-0.6', '-0.4', '-0.2', '0','0.2','0.4','0.6'],**my_font)
+plt.yticks(**my_font)
+#plt.xlabel('Years',**my_font)
+plt.ylabel('freshwater flux (mm/day)',**my_font)
+plt.xlabel("(Years) ",**my_font)
+plt.axis("tight")
+ax1.set(ylim=(-0.6, 1.3),xlim=(0, 350))
+ax1.text(0.49, 0.01, '(a)', transform=ax1.transAxes,size=36, weight='bold')
+#ax1.set_title('(a) Sea ice induced freshwater flux in the Central Weddell Sea (30$^\circ$W - 0$^\circ$E, 63$^\circ$S - 68$^\circ$S,  5 Year running mean data)',fontsize = '18')
+#############################################################################
+ax2 = fig.add_axes([0.1, 0.1, 0.8, 0.35],
+                    xticklabels=[])
+map = Basemap(projection='aeqd', lat_0 = -70, lon_0 = 0,area_thresh = 100,\
+                     width = 6000000,height = 4000000,resolution ='h') 
+#############################################
+##width = 2500000,height = 1500000
+##lat_0 = -65, lon_0 = 0
+#############################################
+map.drawcoastlines()
+map.fillcontinents(color = 'lightgrey')
+map.drawmapboundary(color='black')
+ 
+map.drawparallels(np.arange(-90,91,5),labels=[1,0,0,0],**my_font)
+map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+
+x,y=map(lont,latt)
+CP = map.contourf(x,y,-di*10,levels = nice_levels,cmap = new_cmap,norm =norm,spacing = 'uniform',extend='both')
+CP.cmap.set_over('darkblue')
+CP.cmap.set_under('firebrick')
+
+
+x2,y2=map(lont2,latt2)
+map.plot(x2,y2,'black',linewidth=5)
+x3,y3=map(lont3,latt3)
+map.plot(x3,y3,'black',linewidth=5)
+x4,y4=map(lont4,latt4)
+map.plot(x4,y4,'black',linewidth=5)
+x5,y5=map(lont5,latt5)
+map.plot(x5,y5,'black',linewidth=5)
+#CS=map.contour(x,y,plotvar,[700],colors = 'r', linestyles = 'solid',linewidths=1)
+#plt.clabel(CS, inline=0.1, fontsize=35)
+#cbar =map.colorbar(CP,extend='both',extendfrac='auto',extendrect='True')
+cbar =map.colorbar(CP,extendfrac='auto',ticks=nice_levels)
+#cbar.minorticks_on()
+cbar.ax.tick_params(labelsize=18) 
+cbar.set_label('(mm/day)', **my_font)
+#plt.xlabel("(c) TIME 0460-0469 ten year mean (sea ice induced freshwater flux)",fontsize = '16')
+ax2.text(0.47, 0.01, '(c)', transform=ax2.transAxes,size=36, weight='bold')
+################################################################
+ax3 = fig.add_axes([0.1, 0.5, 0.8, 0.35],
+                    xticklabels=[])
+map = Basemap(projection='aeqd', lat_0 = -70, lon_0 = 0,area_thresh = 100,\
+                     width = 6000000,height = 4000000,resolution ='h') 
+#############################################
+##width = 2500000,height = 1500000
+##lat_0 = -65, lon_0 = 0
+#############################################
+map.drawcoastlines()
+map.fillcontinents(color = 'lightgrey')
+map.drawmapboundary(color='black')
+ 
+map.drawparallels(np.arange(-90,91,5),labels=[1,0,0,0],**my_font)
+map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+
+x,y=map(lont,latt)
+CP = map.contourf(x,y,-di2*10,levels = nice_levels,cmap = new_cmap,norm =norm,spacing = 'uniform',extend='both')
+CP.cmap.set_over('darkblue')
+CP.cmap.set_under('firebrick')
+
+x2,y2=map(lont2,latt2)
+map.plot(x2,y2,'black',linewidth=5)
+x3,y3=map(lont3,latt3)
+map.plot(x3,y3,'black',linewidth=5)
+x4,y4=map(lont4,latt4)
+map.plot(x4,y4,'black',linewidth=5)
+x5,y5=map(lont5,latt5)
+map.plot(x5,y5,'black',linewidth=5)
+
+#CS=map.contour(x,y,plotvar,[700],colors = 'r', linestyles = 'solid',linewidths=1)
+#plt.clabel(CS, inline=0.1, fontsize=35)
+#cbar =map.colorbar(CP,extend='both',extendfrac='auto',extendrect='True')
+cbar =map.colorbar(CP,extendfrac='auto',ticks=nice_levels)
+#cbar.minorticks_on()
+cbar.ax.tick_params(labelsize=18) 
+cbar.set_label('(mm/day)', **my_font)
+#plt.xlabel("(b) TIME 0430-0439 ten year mean (sea ice induced freshwater flux)",fontsize = '16')
+ax3.text(0.47, 0.01, '(b)', transform=ax3.transAxes,size=36, weight='bold')
+plt.savefig("dvidtnew.png",bbox_inches='tight')
+
+####################################################################
+########################      Fig.11         ########################
+####################################################################
+
+import netCDF4 as nc
+import matplotlib.pyplot as plt
+from matplotlib.colors import from_levels_and_colors
+import numpy as np
+from matplotlib import animation
+from matplotlib.colors import BoundaryNorm
+import matplotlib.colors as cols
+import matplotlib as mpl
+from mpl_toolkits.basemap import Basemap
+from matplotlib import ticker, cm
+import seaborn as sns
+
+#mpdi = np.loadtxt("regional.out")
+mpdi = np.loadtxt("RMPD40W30E.out")
+position = np.loadtxt("postion5yearrunni65.out")
+#PE = np.loadtxt("P-Enewnew.out")
+#PEmean = np.nanmean(PE)
+PE = np.loadtxt("resultrainsnow.out")
+PEmean = np.nanmean(PE)
+########################
+#NET = np.loadtxt("NET.out")
+EVA = np.loadtxt("resultevacocean.out")
+EVAcoupler =  np.loadtxt("evapcoupler.out")
+#P65 = np.loadtxt("P65.out")
+P65 = np.loadtxt("RMPD40W30E65.out")
+P65mean = np.nanmean(P65)
+curl  = np.loadtxt("windcurlsmallerregion.out")
+curlmean = np.nanmean(curl)
+
+WG = np.loadtxt("PPMyear1.out")
+WGmean = np.nanmean(WG)
+
+#SSS = np.loadtxt("SSSnew350.out")
+SSS = np.loadtxt("dmeanSSSnew.out")
+SSSmean = np.nanmean(SSS)
+
+SSS = np.convolve(SSS, np.ones((5,))/5, mode='valid')
+d4 = PE.reshape(350,12)
+dmean = np.nanmean(d4,axis=1)
+plt.plot(dmean)
+PE = np.convolve(dmean, np.ones((5,))/5, mode='valid')
+
+d4net = EVA.reshape(350,12)
+dmeannet = np.nanmean(d4net,axis=1)
+plt.plot(dmeannet)
+eva = np.convolve(dmeannet, np.ones((5,))/5, mode='valid')
+
+d4netco = EVAcoupler.reshape(350,12)
+dmeannetco = np.nanmean(d4netco,axis=1)
+plt.plot(dmeannetco)
+evaco = np.convolve(dmeannetco, np.ones((5,))/5, mode='valid')
+
+np.savetxt('totalla.out',PE)
+
+wspxx = np.loadtxt("wspxx2new.out")
+mrpxx = np.loadtxt("mrpxx2.out")
+#arpxx = np.loadtxt("arpxx2.out")
+t = np.arange(2,348,1)
+
+#t = np.arange(0,4176,12)
+my_font = {'fontname':'Cambria', 'size':'16'}
+##################################################################
+fig = plt.figure(figsize=(20,20), dpi=100)
+################################################################
+ax1 = fig.add_axes([0.1, 0.9, 0.8, 0.15],
+                    xticklabels=[])
+
+
+ax1.plot(t,-P65,'black',linewidth=4)
+plt.hlines(0, 0, 350, colors = "black",linestyles = "dashed")
+#ax2.fill_between(t,P65mean,P65,where=P65 < 0,facecolor='purple', alpha=1)
+#plt.vlines(arpxx, , 0.65, colors = "lightgrey",linewidth=5)
+plt.vlines(mrpxx, -0.79, 0.65, colors = "lightgrey",linewidth=5)
+plt.vlines(wspxx, -0.79, 0.65, colors = "grey",linewidth=5)
+plt.yticks(**my_font)
+plt.ylabel('Standardized Sea level pressure at 65$^\circ$S',color= 'black',**my_font)
+ax1.set(ylim=(-0.65, 0.65),xlim=(0, 350))
+plt.yticks(**my_font)
+
+xxx = np.arange(-0.8,0.6,0.2)
+ax1.text(0.02, 0.1, '(a)', transform=ax1.transAxes,size=26, weight='bold')
+#plt.title('(a)', fontsize=25)
+###########################################
+ax2 = fig.add_axes([0.1, 0.75, 0.8, 0.15],
+                   xticklabels=[])
+
+ax2.plot(t,mpdi,'blue',linewidth=4)
+plt.hlines(0, 0, 350, colors = "blue",linestyles = "dashed")
+#ax1.fill_between(t,0,mpdi,where=mpdi < 0,facecolor='red', alpha=1)
+#plt.vlines(arpxx, 0, 0.65, colors = "lightgrey",linewidth=5)
+plt.vlines(mrpxx, -0.79, 0.65, colors = "lightgrey",linewidth=5)
+plt.vlines(wspxx, -0.79, 0.65, colors = "grey",linewidth=5)
+plt.yticks(**my_font)
+plt.ylabel('RMPD index',color= 'black',**my_font)
+plt.axis("tight")
+ax2.set(ylim=(-0.8, 0.65),xlim=(0, 350))
+ax2.yaxis.set_label_position('right')
+ax2.yaxis.set_ticks_position('right')
+plt.yticks(**my_font)
+
+#plt.yticks(xxx, ('0.8','0.6','','0.4','','0.2','','0','','-0.2','','-0.4','','-0.6'),**my_font)
+#plt.yticks(xxx, ('','0.6','0.4','0.2','0','--0.2','-0.4','-0.6','-0.8'),**my_font)
+#ax2.yaxis.get_offset_text().set_fontsize(16)
+#plt.gca().invert_yaxis()
+ax2.text(0.02, 0.1, '(b)', transform=ax2.transAxes,size=26, weight='bold')
+#####################################################################
+#ax3 = fig.add_axes([0.1, 0.6, 0.8, 0.15],
+                   #xticklabels=[])
+
+#plt.vlines(arpxx, PEmean*3600*24*100/997, 0.000005*3600*24*100/997,colors = "lightgrey",linewidth=5)
+#plt.vlines(mrpxx, -52.5,-49, colors = "lightgrey",linewidth=5)
+#plt.vlines(wspxx, -52.5,-49, colors = "grey",linewidth=5)
+#ax3.plot(t,position,'purple',linewidth=4)
+#ax3.fill_between(t,PE,PEmean,where=PEmean > PE,facecolor='green', alpha=1)
+#plt.hlines(PEmean*3600*24*100/997, 0, 350, colors = "purple",linestyles = "dashed")
+#plt.ylabel('Position of the biggest westerlies ($^\circ$S)',**my_font)
+#ax3.set(ylim=(-52.5,-49),xlim=(0, 350))
+#ax3.yaxis.get_major_formatter().set_powerlimits((0,1))
+#ax3.yaxis.get_offset_text().set_fontsize(16)
+#plt.yticks(**my_font)
+#plt.title('(c)', fontsize=25)
+
+
+###################################################
+ax3 = fig.add_axes([0.1, 0.6, 0.8, 0.15],
+                   xticklabels=[],ylim=(-0.000000011, 0.0000000085))
+
+ax3.plot(t,0.001*curl,'black',linewidth=4)
+plt.hlines(0.001*curlmean, 0, 350, colors = "black",linestyles = "dashed")
+#ax4.fill_between(t,0.001*curlmean,0.001*curl,where=curl < curlmean,facecolor='purple', alpha=1)
+ax3.set(ylim=(-0.00000002, 0.00000002),xlim=(0, 350))
+#plt.vlines(arpxx, 0, 0.0000000085, colors = "lightgrey",linewidth=5)
+plt.vlines(mrpxx, -0.00000002, 0.00000002, colors = "lightgrey",linewidth=5)
+plt.vlines(wspxx, -0.00000002, 0.00000002, colors = "grey",linewidth=5)
+plt.ylabel('Wind stress curl anomaly(N/m$^3$)',color= 'black',**my_font)
+ax3.yaxis.get_offset_text().set_fontsize(16)
+#ax4.yaxis.set_label_position('right')
+#ax4.yaxis.set_ticks_position('right')
+plt.yticks(**my_font)
+ax3.text(0.02, 0.1, '(c)', transform=ax3.transAxes,size=26, weight='bold')
+##########################################################################################
+ax4 = fig.add_axes([0.1, 0.45, 0.8, 0.15],
+                   xticklabels=[])
+
+#plt.vlines(arpxx, PEmean*3600*24*100/997, 0.000005*3600*24*100/997,colors = "lightgrey",linewidth=5)
+plt.vlines(mrpxx, 1,2.2, colors = "lightgrey",linewidth=5)
+plt.vlines(wspxx, 1,2.2, colors = "grey",linewidth=5)
+ax4.plot(t,PE*10,'purple',linewidth=4)
+#ax4.plot(t,-eva*10*3600*24*100/997,'orange',linewidth=3)
+#ax4.plot(t,PE*10+eva*10*3600*24*100/997,'darkgreen',linewidth=5)
+####ax4.plot(t,-evaco*10,'darkred',linewidth=5)
+#####ax4.plot(t,PE*10+evaco*10,'darkgreen',linewidth=5)
+#ax3.fill_between(t,PE,PEmean,where=PEmean > PE,facecolor='green', alpha=1)
+#plt.hlines(PEmean*3600*24*100/997, 0, 350, colors = "purple",linestyles = "dashed")
+plt.ylabel('Total Precipitation (mm/day)',**my_font)
+ax4.set(ylim=(1.2,2),xlim=(0, 350))
+#ax3.yaxis.get_major_formatter().set_powerlimits((0,1))
+ax4.yaxis.get_offset_text().set_fontsize(16)
+ax4.yaxis.set_label_position('right')
+ax4.yaxis.set_ticks_position('right')
+plt.yticks(**my_font)
+ax4.text(0.02, 0.1, '(d)', transform=ax4.transAxes,size=26, weight='bold')
+########################################
+
+#ax5 = fig.add_axes([0.1, 0.3, 0.8, 0.15],xticklabels=[])
+
+#ax5.plot(t,SSS,'blue',linewidth=4)
+#plt.hlines(SSSmean, 0, 350, colors = "purple",linestyles = "dashed")
+#ax3.fill_between(t,SSSmean,SSS,where=SSS < SSSmean,facecolor='green', alpha=1)
+#plt.yticks(**my_font)
+#plt.vlines(arpxx, SSSmean, 34.6, colors = "lightgrey",linewidth=5)
+#plt.vlines(mrpxx, 34.33, 34.7, colors = "lightgrey",linewidth=5)
+#plt.vlines(wspxx, 34.33, 34.7, colors = "grey",linewidth=5)
+#plt.ylabel('Upper Ocean Salinity (psu)',color= 'black',**my_font)
+#plt.axis("tight")
+#ax5.set(ylim=(34.33, 34.7,),xlim=(0, 350)) 
+#ax6.yaxis.set_label_position('right')
+#ax6.yaxis.set_ticks_position('right')
+#plt.yticks(**my_font)
+#plt.title('(e)', fontsize=25)
+########################################
+
+ax5 = fig.add_axes([0.1, 0.3, 0.8, 0.15],xticklabels=[])
+                   #xlim=(0, 350),ylim=(55, 92))
+
+ax5.plot(t,WG,'red',linewidth=3)
+#plt.vlines(arpxx, 55, 92, colors = "lightgrey",linewidth=5)
+plt.vlines(mrpxx, 55, 92, colors = "lightgrey",linewidth=5)
+plt.vlines(wspxx, 55, 92, colors = "grey",linewidth=5)
+plt.yticks(**my_font)
+ax5.set(ylim=(55, 92),xlim=(0, 350))
+plt.ylabel('Weddell Gyre Strength (Sv)',color= 'black',**my_font)
+plt.xlabel('Model Years',**my_font)
+#plt.xticks(range(0,350,20), ['150','170','190','210','230', '250', '270','290','310','330','350', '370', '390','410','430','450','470','490'],**my_font)
+#plt.xticks(**my_font)
+#ax6.yaxis.get_offset_text().set_fontsize(16)
+#ax6.yaxis.set_label_position('right')
+#ax6.yaxis.set_ticks_position('right')
+plt.yticks(**my_font)
+ax5.text(0.02, 0.1, '(e)', transform=ax5.transAxes,size=26, weight='bold')
+
+########################################
+
+ax6 = fig.add_axes([0.1, 0.15, 0.8, 0.15])
+
+ax6.plot(t,SSS,'blue',linewidth=4)
+#plt.hlines(SSSmean, 0, 350, colors = "purple",linestyles = "dashed")
+#ax3.fill_between(t,SSSmean,SSS,where=SSS < SSSmean,facecolor='green', alpha=1)
+#plt.yticks(**my_font)
+#plt.vlines(arpxx, SSSmean, 34.6, colors = "lightgrey",linewidth=5)
+plt.vlines(mrpxx, 34.0, 34.6, colors = "lightgrey",linewidth=5)
+plt.vlines(wspxx, 34.0, 34.6, colors = "grey",linewidth=5)
+plt.ylabel('Upper Ocean Salinity (psu)',color= 'black',**my_font)
+plt.axis("tight")
+ax6.set(ylim=(34.0, 34.6,),xlim=(0, 350)) 
+ax6.yaxis.set_label_position('right')
+ax6.yaxis.set_ticks_position('right')
+plt.yticks(**my_font)
+ax6.text(0.02, 0.1, '(f)', transform=ax6.transAxes,size=26, weight='bold')
+plt.xticks(range(0,350,20), ['150','170','190','210','230', '250', '270','290','310','330','350', '370', '390','410','430','450','470','490'],**my_font)
+plt.xlabel("(Years) ",**my_font)
+plt.xticks(**my_font)
+########################################
+
+plt.savefig("allinonenew.png",bbox_inches='tight',dpi=fig.dpi)
+
+
+####################################################################
+########################      Fig.13         ########################
+####################################################################
+
+data=nc.Dataset('B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.aice.046001-046912.nc')
+
+plotvar = data.variables['aice'][20:120:12,0:600,0:3600]
+lont = data.variables['TLON'][0:600,0:3600]
+latt = data.variables['TLAT'][0:600,0:3600]
+aveplot = np.nanmean(plotvar,axis=0)
+#aveplot = plotvar
+
+# 63-68,,, 
+lont2 = lont[247:365,1100]
+latt2 = latt[247:365,1100]
+lont3 = lont[247:365,800]
+latt3 = latt[247:365,800]
+lont4 = lont[247,800:1100]
+latt4 = latt[247,800:1100]
+lont5 = lont[365,800:1100]
+latt5 = latt[365,800:1100]
+
+data=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ocn300/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.pop.h.0021-01.KMT.nc')
+plotvar = data.variables['KMT'][:,:]
+datau=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ocn300/UVEL/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.pop.h.0021-01.UVEL.nc')
+plotvaru = datau.variables['UVEL'][0,1,:,:]
+lontu = datau.variables['ULONG'][:,:]
+lattu = datau.variables['ULAT'][:,:]
+data=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ocn300/B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.pop.h.0021-01.z_w_bot.nc')
+plotvar2 = data.variables['z_w_bot'][:]
+
+depth = plotvar2/100
+
+num = np.arange(1,62)
+
+for i in num: 
+    plotvar[plotvar==i] = depth[i]
+    
+plotvar[plotvar==0] = -1
+lontu[lontu ==-1] = np.nan
+lattu[lattu ==-1] = np.nan
+lontu[:,1089] = -1
+
+lont2 = lontu[200:410,1130]
+latt2 = lattu[200:410,1130]
+data=nc.Dataset('B.E.13.B1850C5.ne120_t12.sehires38.003.sunway_02.cice.h.dvidtt.046001-046912.nc')
+plotvar2 = data.variables['dvidtt'][:,0:600,0:3600]
+#lont = data.variables['TLON'][0:600,0:3600]
+#latt = data.variables['TLAT'][0:600,0:3600]
+aveplot2 = np.nanmean(plotvar2,axis=0)
+
+#################################################################
+nice_cmap=plt.get_cmap('Blues')
+lev_cmap = nice_cmap([220,210,190,180,170,150,130,110,100,90,80,70,60,50,40,30])
+new_cmap = cols.ListedColormap(lev_cmap,"Blues")
+#nice_levels = [0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]
+nice_levels = [70,90,91,92,93,94,95,96]
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+#################################################################
+nice_levels2 = [2000,2500,3000,3500,4000]
+fig = plt.figure(figsize=(20,30), dpi=100)
+ax1 = fig.add_axes([0.1, 0.59, 0.8, 0.43],
+                    xticklabels=[])
+my_font = {'fontname':'Cambria', 'size':'35'}
+# set the mapping range
+map = Basemap(projection='aeqd', lat_0 = -65, lon_0 = 0,area_thresh = 100,\
+                     width = 2000000,height = 1000000,resolution ='h')  
+map.drawcoastlines()
+map.fillcontinents(color = 'lightgrey')
+map.drawmapboundary(color='black')
+ 
+map.drawparallels(np.arange(-90,91,1),labels=[1,0,0,0],**my_font)
+map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+
+x,y=map(lont,latt)
+CP = map.contourf(x,y,aveplot,range(0,100),cmap = new_cmap,norm =norm,levels = nice_levels,spacing = 'uniform',extend='both')
+CP.cmap.set_over('white')
+CP.cmap.set_under('darkblue')
+#x2,y2=map(lont2,latt2)
+#map.plot(x2,y2,'black',linewidth=8)
+x2,y2=map(lont2,latt2)
+map.plot(x2,y2,'yellow',linewidth=3)     
+xq,yq=map(lontu,lattu)
+  
+CS = map.contour(xq,yq,plotvar,levels = nice_levels2,colors= 'black',linestyles = 'solid',linewidths=4)
+plt.clabel(CS,fontsize=12,fmt='%4d')
+#CS=map.contour(x,y,plotvar2,[0.1,0.3],colors = 'green', linestyles = 'solid',linewidths=2)
+#plt.clabel(CS,fontsize=30,fmt='%1.1f')
+
+cbar =map.colorbar(CP,extendfrac='auto',ticks = nice_levels)
+cbar.ax.tick_params(labelsize=35) 
+cbar.set_label('(%)', **my_font)
+#plt.xlabel("(b)",**my_font)
+ax1.text(0.02, 0.04, '(b)', transform=ax1.transAxes,size=36, weight='bold')
+#########################################
+ax2 = fig.add_axes([0.1, 0.9, 0.8, 0.43])
+nice_cmap=plt.get_cmap('seismic')
+lev_cmap = nice_cmap([210,170,160,150,130,120,110,100,90,\
+                             80,70,60,50,40,30,20])
+new_cmap = cols.ListedColormap(lev_cmap,"seismic")
+
+nice_levels = [-1.6,-1.2,-0.8,-0.4,0,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.2] 
+norm = mpl.colors.BoundaryNorm(nice_levels, new_cmap.N)
+        #********************************************************************nice_levels = [-4,-3,-2,-1,0,1,2,3,4]    
+nice_levels2 = [2000,2500,3000,3500,4000]
+        #plt.figure(figsize=(25,20))
+my_font = {'fontname':'Cambria', 'size':'35'}
+
+map = Basemap(projection='aeqd', lat_0 = -65, lon_0 = 0,area_thresh = 100,\
+                     width = 2000000,height = 1000000,resolution ='h') 
+map.drawcoastlines()
+map.fillcontinents(color = 'grey')
+map.drawmapboundary(color='black')
+ 
+map.drawparallels(np.arange(-90,91,1),labels=[1,0,0,0],**my_font)
+map.drawmeridians(np.arange(-180,180,10),labels=[0,0,1,0],**my_font)
+x2,y2=map(lont2,latt2)
+map.plot(x2,y2,'yellow',linewidth=3)
+       
+xq,yq=map(lontu,lattu)
+  
+CS = map.contour(xq,yq,plotvar,levels = nice_levels2,colors= 'black',linestyles = 'solid',linewidths=4)
+plt.clabel(CS,fontsize=12,fmt='%4d')
+x,y=map(lont,latt)
+CP2 = map.contourf(x,y,-aveplot2*10,levels = nice_levels,cmap = new_cmap,norm =norm,spacing = 'uniform',extend='both')
+CP2.cmap.set_over('black')
+CP2.cmap.set_under('firebrick')
+cbar =map.colorbar(CP2,extendfrac='auto',ticks=nice_levels)
+cbar.ax.tick_params(labelsize=35)
+cbar.set_label('(mm/day)', **my_font)
+#plt.suptitle("TIME 0119-10",**my_font)
+#plt.xlabel("(a)",**my_font)
+ax2.text(0.02, 0.04, '(a)', transform=ax2.transAxes,size=36, weight='bold')
+plt.savefig("salintiy2.png",bbox_inches='tight')
+
+####################################################################
+########################      Fig.14         ########################
+####################################################################
+
+saltd = np.load("saldepthallnew.npy")
+tempd = np.load("temdepfnew2.npy")
+aged = np.load("agedepthallnew.npy")
+
+dens = np.loadtxt("dens.out")
+den250 = np.loadtxt("den250.out")
+
+salt = np.loadtxt("sal1.out")
+
+wspxx = np.loadtxt("wspxx2new.out")
+mrpxx = np.loadtxt("mrpxx2.out")
+#noxx = np.loadtxt("noxx.out")
+t = np.arange(2,348,1)
+
+data1=nc.Dataset('/ihesp/user/xiliangdiao/data/ihespdata/ocn300/depth.nc')
+C = data1.variables['z_t'][:]/100
+B = C
+
+A = np.arange(350)
+#B = np.arange(50)
+xx, yy = np.meshgrid(B, A)
+
+#t = np.arange(0,4176,12)
+my_font = {'fontname':'Cambria', 'size':'16'}
+##################################################################
+fig = plt.figure(figsize=(20,20), dpi=100)
+################################################################
+################################################################
+t = np.arange(0,350,1)
+ax1 = fig.add_axes([0.1, 0.9, 0.8, 0.2],
+                    xticklabels=[])
+nice_cmap=plt.get_cmap('coolwarm')
+#nice_cmap=sns.diverging_palette(245, 15, n=13,as_cmap=True)
+lev_cmap = nice_cmap([1,30,50,100,130,140,150,170,190,210,230,240]) 
+#new_cmap = cols.ListedColormap(lev_cmap,"praj_cmap")
+new_cmap = cols.ListedColormap(lev_cmap,"coolwarm")
+my_font = {'fontname':'Cambria', 'size':'17'}
+nice_levels = [34.64,34.65,34.66,34.67,34.68,34.69,34.7,34.71,34.72,34.73]
+
+#plt.text(-30, 300, '(a)', fontsize=25)
+#plt.title('(a)', fontsize=25)
+im = ax1.contourf(yy[:,:45], xx[:,:45], saltd[:,:45],levels = nice_levels,cmap=nice_cmap,interpolation='none',extend='both')
+im.cmap.set_over('firebrick')
+im.cmap.set_under('darkblue')
+###############################colorbarsetting
+cbar = fig.colorbar(im, ax=ax1, ticks=nice_levels,extendfrac='auto')
+cbar.ax.tick_params(labelsize=15)
+#cbar.minorticks_on()
+cbar.set_label('Salinity (psu)', **my_font)
+plt.ylabel('Depth (m)',**my_font)
+plt.gca().invert_yaxis()
+plt.yticks(**my_font)
+ax1.text(0.02, 0.1, '(a)', transform=ax1.transAxes,size=26, weight='bold')
+#############################
+###########################################
+ax2 = fig.add_axes([0.1, 0.7, 0.8, 0.2],
+                   xticklabels=[])
+#nice_cmap=sns.diverging_palette(245, 15, n=13,as_cmap=True)
+nice_cmap=plt.get_cmap('bwr')
+lev_cmap = nice_cmap([1,30,50,100,130,140,150,170,190,210,230,240]) 
+#new_cmap = cols.ListedColormap(lev_cmap,"praj_cmap")
+new_cmap = cols.ListedColormap(lev_cmap,"bwr")
+my_font = {'fontname':'Cambria', 'size':'17'}
+nice_levels = [-1,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.2,-0.1,0,0.1,0.2]
+#plt.title('(b)', fontsize=25)
+im = ax2.contourf(yy[:,:45], xx[:,:45], tempd[:,:45],levels = nice_levels,cmap=nice_cmap,interpolation='none',extend='both')
+im.cmap.set_over('crimson')
+im.cmap.set_under('darkblue')
+cbar = fig.colorbar(im, ax=ax2, ticks=nice_levels,extendfrac='auto')
+cbar.ax.tick_params(labelsize=15)
+cbar.set_label('Temperature ($^\circ$C)', **my_font)
+plt.ylabel('Depth (m)',**my_font)
+plt.gca().invert_yaxis()
+plt.yticks(**my_font)
+ax2.text(0.02, 0.1, '(b)', transform=ax2.transAxes,size=26, weight='bold')
+#####################################################################
+ax3 = fig.add_axes([0.1, 0.5, 0.8, 0.2],
+                   xlim=(0, 350))
+
+nice_cmap=plt.get_cmap('seismic')
+lev_cmap = nice_cmap([0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,\
+                      200,210,220,230,240])
+new_cmap = cols.ListedColormap(lev_cmap,"seismic")
+my_font = {'fontname':'Cambria', 'size':'17'}
+#nice_levels = [10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110,115,120]
+nice_levels = [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150]
+#plt.text(-30, 300, '(c)', fontsize=25)
+im = ax3.contourf(yy[:,:45], xx[:,:45], aged[:,:45],levels = nice_levels,cmap=nice_cmap,interpolation='none',extend='both')
+im.cmap.set_over('maroon')
+im.cmap.set_under('black')
+cbar = fig.colorbar(im, ax=ax3, ticks=nice_levels,extendfrac='auto')
+cbar.ax.tick_params(labelsize=15)
+cbar.set_label('Water Age (year)', **my_font)
+plt.ylabel('Depth (m)',**my_font)
+plt.gca().invert_yaxis()
+plt.yticks(**my_font)
+plt.xticks(range(0,350,20), ['150','170','190','210','230', '250', '270','290','310','330','350', '370', '390','410','430','450','470','490'],**my_font)
+plt.xticks(**my_font)
+#plt.title('(c)', fontsize=25)
+ax3.text(0.02, 0.1, '(c)', transform=ax3.transAxes,size=26, weight='bold')
+###########################################
+ax4 = fig.add_axes([0.1, 0.3, 0.8, 0.18],
+                   xticklabels=[],ylim=(27.5, 27.8))
+ax4.plot(t,dens,'r',linewidth=3)
+ax4.plot(t,den250,'g',linewidth=3)
+
+
+plt.ylabel('Density (kg/$m^3$)',color= 'k',**my_font)
+plt.vlines(wspxx, 27.5, 27.79, colors = "lightgrey",linewidth=3)
+#ax4.text(-30, 300, '(d)', fontsize=25)
+ax4.set(ylim=(27.5, 27.8),xlim=(0, 350))
+plt.yticks(**my_font)
+cbar = fig.colorbar(im,ax=ax4) 
+cbar.remove()
+#plt.title('(d)', fontsize=25)
+ax4.text(0.02, 0.1, '(d)', transform=ax4.transAxes,size=26, weight='bold')
+##########################################################################################
+ax5 = fig.add_axes([0.1, 0.12, 0.8, 0.18],
+                   xlim=(0, 350),ylim=(34.30,34.70))
+ax5.plot(t,salt,'purple',linewidth=3)
+plt.vlines(wspxx, 34.3, 34.69, colors = "lightgrey",linewidth=3)
+plt.xlabel('Model Years',**my_font)
+plt.xticks(range(0,350,20), ['150','170','190','210','230', '250', '270','290','310','330','350', '370', '390','410','430','450','470','490'],**my_font)
+plt.xticks(**my_font)
+cbar = fig.colorbar(im,ax=ax5) 
+cbar.remove()
+plt.ylabel('Upper-ocean salinity (psu)',**my_font)
+
+#plt.text(-30, 300, '(e)', fontsize=25)
+
+ax5.yaxis.set_label_position('right')
+ax5.yaxis.set_ticks_position('right')
+plt.yticks(**my_font)
+#plt.title('(e)', fontsize=25)
+ax5.text(0.02, 0.1, '(e)', transform=ax5.transAxes,size=26, weight='bold')
+plt.savefig("reserv.png",bbox_inches='tight',dpi=fig.dpi)
+
+
+
+
